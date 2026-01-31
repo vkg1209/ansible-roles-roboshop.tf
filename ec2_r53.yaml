@@ -1,0 +1,59 @@
+- name: EC2 Instances & R53 Records creation
+  hosts: local
+  connection: local
+  vars:
+    instance_type: t3.micro
+    security_group_id: sg-03c4d065bf7f7f94d
+    ami_id: ami-09c813fb71547fc4f
+    domain_name: bloombear.fun
+  tasks: 
+
+  # installing required python libraries
+  - name: installing botocore and boto3 python libraries
+    ansible.builtin.pip:
+      executable: pip3.9
+      name: "{{ item }}"
+    loop:
+      - botocore
+      - boto3
+
+
+  # task for creating N number of instances
+  # creates N number of ec2 instances based on the list passed with the playbook
+  - name: Creating EC2 Instances
+    amazon.aws.ec2_instance:
+      name: "{{ item }}"
+      instance_type: "{{ instance_type }}"
+      security_group: "{{ security_group_id }}"
+      image_id: "{{ ami_id }}"
+    register: output
+    loop: "{{ instances }}"
+
+# task for creating or updating R53 Records with private-ip-address except for frontend
+  - name: Creating or Updating R53 Records except for Frontend
+    amazon.aws.route53:
+      state: present
+      zone: "{{domain_name}}"
+      record: "{{item.item}}.{{domain_name}}"
+      type: A
+      ttl: 1
+      value: "{{item.instances[0].private_ip_address}}"
+      wait: true
+      overwrite: true
+    loop: "{{output.results}}"
+    when: item.item != "frontend" 
+
+# task for creating or updating R53 Records with public-ip-address only for frontend
+  - name: Creating or Updating R53 Records for Frontend
+    amazon.aws.route53:
+      state: present
+      zone: "{{domain_name}}"
+      record: "{{domain_name}}"
+      type: A
+      ttl: 1
+      value: "{{item.instances[0].public_ip_address}}"
+      wait: true
+      overwrite: true
+    loop: "{{output.results}}"
+    when: item.item == "frontend" 
+    

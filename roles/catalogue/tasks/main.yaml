@@ -1,0 +1,32 @@
+- name: app setup
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: app-setup.yaml
+
+- name: nodejs
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: nodejs.yaml
+
+- name: copying mongo repo file
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d
+
+- name: installing monosh (mongodb client)
+  ansible.builtin.package:
+    name: mongodb-mongosh
+    state: present
+
+- name: connnect to mongodb catalogue
+  ansible.builtin.command: mongosh mongodb.bloombear.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
+  register: catalogue_output
+
+- name: loading the catalogue products data into the mongodb server
+  ansible.builtin.shell: mongosh --host mongodb.bloombear.fun </app/db/master-data.js
+  when: catalogue_output.stdout | int < 0
+
+- name: service setup
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: service-setup.yaml

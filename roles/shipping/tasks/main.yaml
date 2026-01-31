@@ -1,0 +1,42 @@
+
+- name: install all required python libraries
+  ansible.builtin.pip:
+    executable: pip3.9
+    name: "{{ item }}"
+  loop:
+    - cryptography
+    - PyMySQL
+
+- name: app setup
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: app-setup.yaml
+
+- name: java
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: java.yaml
+
+- name: Installing MySQL client
+  ansible.builtin.package:
+    name: mysql
+    state: present
+
+- name: loading the shipping data into mysql server
+  community.mysql.mysql_db:
+    state: import
+    name: all
+    login_host: mysql.bloombear.fun
+    login_user: "{{MYSQL_ROOT_USER}}"
+    login_password: "{{MYSQL_ROOT_PASSWORD}}"
+    target: "{{ item }}"
+  loop:
+  - /app/db/schema.sql
+  - /app/db/app-user.sql 
+  - /app/db/master-data.sql
+
+- name: service setup
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: service-setup.yaml
+

@@ -1,0 +1,9 @@
+MONGODB_HOST: mongodb.bloombear.fun
+REDIS_HOST: redis.bloombear.fun
+CATALOGUE_HOST: catalogue.bloombear.fun
+CART_HOST: cart.bloombear.fun
+USER_HOST: user.bloombear.fun
+MYSQL_HOST: mysql.bloombear.fun
+RABBITMQ_HOST: rabbitmq.bloombear.fun
+PAYMENT_HOST: payment.bloombear.fun
+SHIPPING_HOST: shipping.bloombear.fun
