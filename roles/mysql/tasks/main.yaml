@@ -10,4 +10,4 @@
     state: started
 
 - name: setting up the root password
-  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{mysql_root_password}}"
+  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{MYSQL_ROOT_PASSWORD}}"
