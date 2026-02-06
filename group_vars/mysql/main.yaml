@@ -1,1 +1,6 @@
-MYSQL_ROOT_PASSWORD: "{{ lookup('amazon.aws.aws_ssm', '/roboshop/{{ env }}/mysql/mysql_root_password', region='us-east-1', decrypt=True ) }}"
+# MYSQL_ROOT_PASSWORD: "{{ lookup('amazon.aws.aws_ssm', '/roboshop/{{ env }}/mysql/mysql_root_password', region='us-east-1', decrypt=True ) }}"
+
+vars:
+  mysql_ssm_path: "/roboshop/{{ env }}/mysql/mysql_root_password"
+
+MYSQL_ROOT_PASSWORD: "{{ lookup('amazon.aws.aws_ssm', mysql_ssm_path, region='us-east-1', decrypt=True) }}"
