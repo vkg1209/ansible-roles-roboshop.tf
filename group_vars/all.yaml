@@ -1,9 +1,9 @@
-MONGODB_HOST: mongodb.bloombear.fun
-REDIS_HOST: redis.bloombear.fun
-CATALOGUE_HOST: catalogue.bloombear.fun
-CART_HOST: cart.bloombear.fun
-USER_HOST: user.bloombear.fun
-MYSQL_HOST: mysql.bloombear.fun
-RABBITMQ_HOST: rabbitmq.bloombear.fun
-PAYMENT_HOST: payment.bloombear.fun
-SHIPPING_HOST: shipping.bloombear.fun
+MONGODB_HOST: mongodb-{{ env }}.bloombear.fun
+REDIS_HOST: redis-{{ env }}.bloombear.fun
+CATALOGUE_HOST: catalogue-{{ env }}.bloombear.fun
+CART_HOST: cart-{{ env }}.bloombear.fun
+USER_HOST: user-{{ env }}.bloombear.fun
+MYSQL_HOST: mysql-{{ env }}.bloombear.fun
+RABBITMQ_HOST: rabbitmq-{{ env }}.bloombear.fun
+PAYMENT_HOST: payment-{{ env }}.bloombear.fun
+SHIPPING_HOST: shipping-{{ env }}.bloombear.fun
