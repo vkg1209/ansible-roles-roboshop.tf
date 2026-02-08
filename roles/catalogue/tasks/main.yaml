@@ -19,7 +19,7 @@
     state: present
 
 - name: connnect to mongodb catalogue
-  ansible.builtin.command: mongosh mongodb.bloombear.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
+  ansible.builtin.command: mongosh mongodb-{{ env }}.bloombear.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
   register: catalogue_output
 
 - name: loading the catalogue products data into the mongodb server
